@@ -12,6 +12,9 @@ import (
 
 var mu = &sync.Mutex{}
 
+// Crawls many pages of a website.
+// The crawler is constrained to the domains of the website.
+// Passing a max requests doesn't guarantee that the crawler will return that many amount of pages.
 func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 	// If not set depth and maxRequests, default to depth = 2 without maxRequests.
 	// Since I'm not allowing for inifnite requests.
@@ -37,8 +40,8 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 	}
 
 	// Get the domain of the website, since it will not be allowed to scrape
-	// other domains.
-	domain, err := parseDomain(websiteUrl)
+	// other domains. Domains is a slice because it adds 'www' as a variation.
+	domains, err := getAllowedDomains(websiteUrl)
 	if err != nil {
 		logging.Logger.Fatal(err)
 	}
@@ -49,7 +52,7 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 	// Create and configure colly collector
 	c := colly.NewCollector()
 	c.MaxDepth = depth
-	c.AllowedDomains = []string{domain}
+	c.AllowedDomains = domains
 	c.AllowURLRevisit = false
 	c.Async = true
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 4})
@@ -88,22 +91,19 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 	})
 
 	c.OnRequest(func(r *colly.Request) {
-
 		// Only check for max requests if is not set to 0
 		if maxRequests != 0 {
 			// Before request, check if already sent the max amount
 			// of requests, if not, increment counter and continue
 			mu.Lock()
-			if requestCount >= maxRequests {
-				fmt.Println("Stoping request")
+			if requestCount > maxRequests {
+				logging.Logger.Printf("Stoping request because of max requests")
 				r.Abort()
 			}
 			fmt.Println("Requesting", r.URL)
 			requestCount++
 			mu.Unlock()
 		}
-
-		fmt.Println("Visiting", r.URL.String())
 	})
 
 	c.Visit(websiteUrl)
@@ -115,12 +115,14 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 	return *websiteResult
 }
 
-func parseDomain(website string) (domain string, err error) {
+func getAllowedDomains(website string) (domains []string, err error) {
 	// Parse URL
 	u, err := url.Parse(website)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	domain = u.Hostname()
-	return domain, nil
+	domains = append(domains, u.Hostname())
+	// Add the variation with www
+	domains = append(domains, "www."+u.Hostname())
+	return domains, nil
 }
