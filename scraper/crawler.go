@@ -44,7 +44,7 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 	}
 
 	// Log that crawler started on website
-	logging.Logger.Printf("Crawler started on website %s", websiteUrl)
+	logging.Logger.Printf("Crawler started on website %s with a depth of %d and a maxRequests of %d", websiteUrl, depth, maxRequests)
 
 	// Create and configure colly collector
 	c := colly.NewCollector()
