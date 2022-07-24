@@ -7,10 +7,6 @@ import (
 	"github.com/mtrentz/Website-Text-Scraper/scraper"
 )
 
-func HelloController(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "Hello"})
-}
-
 func ScrapeUrl(c *gin.Context) {
 	payload := struct {
 		Url         string `json:"url"`

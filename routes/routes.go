@@ -7,9 +7,6 @@ import (
 
 func HandleRequest() {
 	r := gin.Default()
-	// r.POST("/api/v1/scrape", controllers.ScrapeWebsite)
-	// r.GET("/api/v1/classify/:id", controllers.ClassifyWebsite)
-	r.GET("/api/v1/hello", controllers.HelloController)
 	r.POST("/api/v1/scrape", controllers.ScrapeUrl)
 	r.Run()
 }
