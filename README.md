@@ -25,9 +25,6 @@ Max requests is supposed to be used to limit the amount of scrapes, but it doesn
 # Example
 ```
 curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://hltv.org", "max_requests":5}' -H "Content-Type: application/json"
-
-# Watch out for large amount of requests when using depth without using max_requests
-curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://hltv.org", "depth":2}' -H "Content-Type: application/json"
 ```
 
 Result summary:
@@ -47,4 +44,9 @@ Result summary:
         ...
     ]
 }
+```
+
+With depth, which can lead to a very large amount of requests made to the website:
+```
+curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://hltv.org", "depth":2}' -H "Content-Type: application/json"
 ```
