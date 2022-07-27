@@ -3,9 +3,11 @@ package scraper
 import (
 	"fmt"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 	"github.com/mtrentz/Website-Text-Scraper/logging"
 )
@@ -62,18 +64,61 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 		pageUrl := e.Request.URL.String()
 		// Get the HTML string
 		pageHtml, _ := e.DOM.Html()
-		// Parse only the text
-		pageText, err := ParseHtmlText(pageHtml)
+
+		// Put the string into a Reader so I can parse into a goquery document
+		reader := strings.NewReader(pageHtml)
+		doc, err := goquery.NewDocumentFromReader(reader)
 		if err != nil {
-			// This will exit this function, but not the crawler
-			logging.Logger.Printf("Error parsing HTML text: %s\n", err)
-			return
+			logging.Logger.Fatal(err)
+		}
+
+		// Separate the headers, footers and the bodu (rest) of the html
+		rest, headers, footers := removeHeadersAndFooters(doc)
+
+		// Get the text from the rest of the html
+		restHtml, err := rest.Html()
+		if err != nil {
+			logging.Logger.Fatalf("Error parsing rest Html for page %s: %e", pageUrl, err)
+		}
+
+		restText, err := ParseHtmlText(restHtml)
+		if err != nil {
+			logging.Logger.Fatalf("Error parsing rest Text for page %s: %e", pageUrl, err)
+		}
+
+		// Get the text of the footers and headers
+		var headersText string
+		var footersText string
+
+		for _, header := range headers {
+			headerHtml, err := header.Html()
+			if err != nil {
+				logging.Logger.Fatalf("Error parsing header Html for page %s: %e", pageUrl, err)
+			}
+			headerText, err := ParseHtmlText(headerHtml)
+			if err != nil {
+				logging.Logger.Fatalf("Error parsing header Text for page %s: %e", pageUrl, err)
+			}
+			headersText += headerText + "\n"
+		}
+		for _, footer := range footers {
+			footerHtml, err := footer.Html()
+			if err != nil {
+				logging.Logger.Fatalf("Error parsing footer Html for page %s: %e", pageUrl, err)
+			}
+			footerText, err := ParseHtmlText(footerHtml)
+			if err != nil {
+				logging.Logger.Fatalf("Error parsing footer Text for page %s: %e", pageUrl, err)
+			}
+			footersText += footerText + "\n"
 		}
 
 		// Create a pageResult
 		pageResult := PageResult{
 			Url:       pageUrl,
-			Text:      pageText,
+			Header:    headersText,
+			Body:      restText,
+			Footer:    footersText,
 			VisitedAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 

@@ -4,7 +4,9 @@ import "sync"
 
 type PageResult struct {
 	Url       string `json:"url"`
-	Text      string `json:"text"`
+	Header    string `json:"header"`
+	Body      string `json:"text"`
+	Footer    string `json:"footer"`
 	VisitedAt string `json:"visited_at"`
 }
 

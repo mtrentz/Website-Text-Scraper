@@ -4,6 +4,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/mtrentz/Website-Text-Scraper/logging"
 	"golang.org/x/net/html"
 )
@@ -56,4 +57,24 @@ func ParseHtmlText(pageHtml string) (pageText string, err error) {
 	}
 
 	return text, nil
+}
+
+func removeHeadersAndFooters(doc *goquery.Document) (rest *goquery.Document, headers []*goquery.Selection, footers []*goquery.Selection) {
+	headers = make([]*goquery.Selection, 0)
+	footers = make([]*goquery.Selection, 0)
+
+	// Find the header element, append to headers and remove it
+	doc.Find("header, [class*=header], [id*=header]").Each(func(i int, s *goquery.Selection) {
+		headers = append(headers, s)
+		s.Remove()
+	})
+
+	// Find the footer element, append to footers and remove it
+	doc.Find("footer, [class*=footer], [id*=footer]").Each(func(i int, s *goquery.Selection) {
+		footers = append(footers, s)
+		s.Remove()
+	})
+
+	// return the document and the headers and footers
+	return doc, headers, footers
 }
