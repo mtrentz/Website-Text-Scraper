@@ -30,16 +30,16 @@ curl -X POST http://localhost:8080/api/scrape -H "Content-Type: application/json
 Result summary:
 ```
 {
-    "url": "https://www.hltv.org/",
-    "page_amount": 5,
-    "visited_at": "2022-07-27 18:07:59",
+    "url": "https://www.bbc.com/",
+    "page_amount": 6,
+    "visited_at": "2022-07-27 19:23:55",
     "pages": [
         {
-            "url": "https://www.hltv.org/",
-            "header": "\nExpand\n\n\n\n\n\n\n\nAll\n(17)\nCasters\n(9)\nStreamers\n(7)\nOrganizers\n(1)\n\n\n\n\n",
-            "text": "News\nMatches\nResults\nEvents\nStats\nGalleries\nRankings\nForums\nBetting\nLive\nFantasy\nForgot password ...",
-            "footer": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
-            "visited_at": "2022-07-27 18:08:00"
+            "url": "https://www.bbc.com/",
+            "header": "Home\nNews\nSport\nWeather\niPlayer\nSounds\nBitesize\nCBeebies\nCBBC\nFood\nHome\nNews\nSport\nReel\nWorklife ...",
+            "text": "BBC Homepage\nGas prices soar as Russia cuts German supply\nThe Nord Stream 1 pipeline is now operating at just ...",
+            "footer": "\n\n\n\nHome\nNews\nSport\nWeather\niPlayer\nSounds\nBitesize\nCBeebies\nCBBC\nFood\nHome\nNews\nSport\nReel\n ...",
+            "visited_at": "2022-07-27 19:23:56"
         },
         ...
     ]
