@@ -3,13 +3,13 @@ module github.com/mtrentz/Website-Text-Scraper
 go 1.18
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/gocolly/colly v1.2.0
 	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/antchfx/htmlquery v1.2.5 // indirect
 	github.com/antchfx/xmlquery v1.3.11 // indirect
