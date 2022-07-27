@@ -9,6 +9,7 @@ import (
 	"golang.org/x/net/html"
 )
 
+// Return all texts from a given html string.
 func ParseHtmlText(pageHtml string) (pageText string, err error) {
 	textTags := []string{
 		"a",
@@ -59,6 +60,10 @@ func ParseHtmlText(pageHtml string) (pageText string, err error) {
 	return text, nil
 }
 
+// Look for html blocks that are footers and headers and removed it from the doc. Return them in an array,
+// since there can be more than one header and footer at the same hierarchy level.
+// Footers and headers are detected not only by the tag name, but also by the classes and ids containing
+// 'header' or 'footer' in it's name.
 func removeHeadersAndFooters(doc *goquery.Document) (rest *goquery.Document, headers []*goquery.Selection, footers []*goquery.Selection) {
 	headers = make([]*goquery.Selection, 0)
 	footers = make([]*goquery.Selection, 0)
