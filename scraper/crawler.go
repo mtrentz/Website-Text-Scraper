@@ -18,19 +18,6 @@ var mu = &sync.Mutex{}
 // The crawler is constrained to the domains of the website.
 // Passing a max requests doesn't guarantee that the crawler will return that many amount of pages.
 func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
-	// If not set depth and maxRequests, default to depth = 2 without maxRequests.
-	// Since I'm not allowing for inifnite requests.
-	if depth == 0 && maxRequests == 0 {
-		depth = 2
-		maxRequests = 0
-	} else if depth == 0 {
-		// If depth not set, set it to 0 which means infinite for gocolly
-		depth = 0
-	} else if maxRequests == 0 {
-		// If maxRequests set it to 0, which means inifnite
-		maxRequests = 0
-	}
-
 	requestCount := 0
 
 	// Instantiate the website result
