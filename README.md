@@ -18,7 +18,7 @@ docker run -p 8080:8080 mtrentz/website_text_scraper:latest
 ```
 
 # Usage
-There is a single endpoint at /api/scrape/ that takes in a POST with url, depth, and max_requests. If not provided, depth defaults to 2 and max_requests defaults to 200. For unlimited depth or max_requests, set them as -1.
+There is a single endpoint at /api/scrape/ that takes in a POST with url, depth, and max_requests. If not provided, depth defaults to 2 and max_requests defaults to 200. For unlimited depth or max_requests set them as -1.
 
 Max requests is supposed to be used to limit the amount of scrapes, but it doesn't guarantee that no more than the exact amount of requests will be made.
 
