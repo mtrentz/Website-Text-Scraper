@@ -128,7 +128,7 @@ func CrawlWebsite(websiteUrl string, depth int, maxRequests int) WebsiteResult {
 			// Before request, check if already sent the max amount
 			// of requests, if not, increment counter and continue
 			mu.Lock()
-			if requestCount > maxRequests {
+			if requestCount >= maxRequests {
 				logging.Logger.Printf("Stoping request because of max requests")
 				r.Abort()
 			}
