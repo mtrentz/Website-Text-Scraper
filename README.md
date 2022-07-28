@@ -24,7 +24,7 @@ Max requests is supposed to be used to limit the amount of scrapes, but it doesn
 
 # Example
 ```
-curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://www.bbc.com/", "max_requests":5}' -H "Content-Type: application/json"
+curl -X POST http://localhost:8080/api/scrape/ -d '{"url":"https://www.bbc.com/", "max_requests":5}' -H "Content-Type: application/json"
 ```
 
 Result summary:
@@ -48,5 +48,5 @@ Result summary:
 
 Passsing a depth of 2 and unlimited requests
 ```
-curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://www.bbc.com/", "depth":2, "max_requests":-1}' -H "Content-Type: application/json"
+curl -X POST http://localhost:8080/api/scrape/ -d '{"url":"https://www.bbc.com/", "depth":2, "max_requests":-1}' -H "Content-Type: application/json"
 ```
