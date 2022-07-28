@@ -7,6 +7,6 @@ import (
 
 func HandleRequest() {
 	r := gin.Default()
-	r.POST("/api/scrape", controllers.ScrapeUrl)
+	r.POST("/api/scrape/", controllers.ScrapeUrl)
 	r.Run(":8080")
 }

@@ -23,22 +23,27 @@ func ScrapeUrl(c *gin.Context) {
 	var depth int
 	var maxRequests int
 
-	// If not set depth and maxRequests, defaults to depth = 2 with maxRequests = 200.
-	if payload.Depth == 0 && payload.MaxRequests == 0 {
-		depth = 2
-		maxRequests = 200
-	} else if payload.Depth == 0 {
-		// If depth not set, default it to 2
-		depth = 2
-	} else if payload.MaxRequests == 0 {
-		// If max requests not set, default it to 200
-		maxRequests = 200
-	} else if payload.Depth == -1 {
+	// Check if depth or MaxRequests were set to -1, which is ulimited
+	if payload.Depth == -1 {
 		// If Depth was set to -1, set it to inifnite (0 in gocolly)
 		depth = 0
 	} else if payload.MaxRequests == -1 {
-		// If MaxRequests was set to -1, set it to inifnite (0 in my logic)
+		// If MaxRequests was set to -1, set it to inifnite (0 in the crawler code)
 		maxRequests = 0
+	}
+
+	if payload.Depth == 0 && payload.MaxRequests == 0 {
+		// If not set anything, default to depth of 1 and max requests of 200
+		depth = 2
+		maxRequests = 200
+	} else if payload.Depth == 0 && payload.MaxRequests > 0 {
+		// If depth not set and max requests is set to above 0, default to depth of 2
+		depth = 2
+		maxRequests = payload.MaxRequests
+	} else if payload.MaxRequests == 0 && payload.Depth > 0 {
+		// If max requests not set and depth is set to above 0, default to max requests of 200
+		maxRequests = 200
+		depth = payload.Depth
 	} else {
 		// If both depth and maxRequests were set, use them.
 		depth = payload.Depth
