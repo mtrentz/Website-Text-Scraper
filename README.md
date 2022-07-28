@@ -18,9 +18,9 @@ docker run -p 8080:8080 mtrentz/website_text_scraper:latest
 ```
 
 # Usage
-There is a single endpoint at /api/scrape/ that takes in a POST with url, depth, and max_requests. If not provided the default parameters is a depth of 2.
+There is a single endpoint at /api/scrape/ that takes in a POST with url, depth, and max_requests. If not provided, depth defaults to 2 and max_requests defaults to 200. For unlimited depth or max_requests, set them as -1.
 
-Max requests is supposed to be used to limit the amount of scrapes, but it doesn't guarantee that no more than the provided calls will be made.
+Max requests is supposed to be used to limit the amount of scrapes, but it doesn't guarantee that no more than the exact amount of requests will be made.
 
 # Example
 ```
@@ -31,7 +31,7 @@ Result summary:
 ```
 {
     "url": "https://www.bbc.com/",
-    "page_amount": 6,
+    "page_amount": 5,
     "visited_at": "2022-07-27 19:23:55",
     "pages": [
         {
@@ -46,7 +46,7 @@ Result summary:
 }
 ```
 
-With depth, which can lead to a very large amount of requests made to the website:
+Passsing a depth of 2 and unlimited requests
 ```
-curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://www.bbc.com/", "depth":2}' -H "Content-Type: application/json"
+curl -X POST http://localhost:8080/api/scrape -d '{"url":"https://www.bbc.com/", "depth":2, "max_requests":-1}' -H "Content-Type: application/json"
 ```
